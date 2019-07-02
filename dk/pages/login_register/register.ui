@@ -1,0 +1,199 @@
+<template>
+   <ui-view class="register">
+       <ui-view class="banner"></ui-view>
+       <ui-view class="bottom">
+           <ui-view class="main">
+               <ui-input type="tel" placeholder="请输入手机号" placeholder-class="ui-input-tip" maxlength="11"></ui-input>
+               <ui-input type="password" placeholder="请设置密码(6-12字母、数字组合)" placeholder-class="ui-input-tip" maxlength="12"></ui-input>
+               <ui-sms-input init-text="获取验证码" bindsend="sendCode" placeholder-class="ui-input-tip"></ui-sms-input>
+               <ui-input type="number"  placeholder="请输入邀请码" placeholder-class="ui-input-tip" maxlength="6"></ui-input>
+               <ui-button type="primary" class="submit">提 交</ui-button>
+               <ui-row>
+                   <ui-col span="6">
+                       <ui-text>立即注册</ui-text>
+                   </ui-col>
+                   <ui-col span="6" style="text-align:right">
+                       <ui-text>忘记密码</ui-text>
+                   </ui-col>
+               </ui-row>
+           </ui-view>
+       </ui-view>
+   </ui-view>
+</template>
+
+<script>
+export default {
+    config:{
+        "navigationStyle": "custom"
+    },
+    data(){
+        return {
+            phone:'',//手机号
+            password:'',//密码
+            code:'',//验证码
+            invite:'',//邀请码
+        }
+    },
+    methods:{
+        sendCode(run){
+            run()
+        }
+    }
+}
+</script>
+
+<style lang="less">
+    .ui-input-tip{
+        font-size: 36rpx;
+        font-family: "PingFang";
+        padding: 30rpx 0;
+    }
+    .ui-input-tip::-webkit-input-placeholder{
+        color: rgb( 185, 197, 226 );
+    }
+    .register{
+        width: 100%;
+        height: 100%;
+        .banner{
+            width: 100%;
+            height: 422rpx;
+            background: url('https://www.agamchain.com/static/ffb1d5cfdf7630431cb542a997229f27') no-repeat center center / 750rpx 422rpx;
+        }
+        .bottom{
+            width: 100%;
+            margin-top: 60rpx;
+            .main{
+                width: 570rpx;
+                margin: 0 auto;
+                .ui-input{
+                    border: none;
+                    border-bottom: 1px solid #eee;
+                    padding: 30rpx 0;
+                }
+                .ui-sms-input{
+                   border-bottom: 1px solid #eee;
+                   .cell-right{
+                       padding: 0;
+                   }
+                   .ui-input{
+                       border: none;
+                   }
+                    button{
+                        height: 66rpx;
+                    }
+                }
+                .submit{
+                    margin-top: 80rpx;
+                }
+                .ui-text{
+                    font-size: 26rpx;
+                    font-family: "PingFang";
+                    color: rgb( 185, 197, 226 );
+
+                }
+            }
+        }
+    }
+</style>
+
+
+
+
+
+.获取验证码 {
+  font-size: 36px;
+  font-family: "PingFang";
+  color: rgb( 0, 0, 0 );
+  text-transform: uppercase;
+  line-height: 0.405;
+  text-align: left;
+  text-indent: 24.003px;
+  position: absolute;
+  left: 468.031px;
+  top: 252.063px;
+  width: 165px;
+  height: 34px;
+  z-index: 12;
+}
+.请输入邀请码 {
+  font-size: 36px;
+  font-family: "PingFang";
+  color: rgb( 185, 197, 226 );
+  text-transform: uppercase;
+  line-height: 0.405;
+  text-align: left;
+  text-indent: 24.003px;
+  position: absolute;
+  left: 9.875px;
+  top: 378.063px;
+  width: 198px;
+  height: 34px;
+  z-index: 11;
+}
+.矩形_5_拷贝_3 {
+  background-color: rgb( 213, 213, 213 );
+  position: absolute;
+  left: 0px;
+  top: 443px;
+  width: 635px;
+  height: 1px;
+  z-index: 10;
+}
+.请输入验证码 {
+  font-size: 36px;
+  font-family: "PingFang";
+  color: rgb( 185, 197, 226 );
+  text-transform: uppercase;
+  line-height: 0.405;
+  text-align: left;
+  text-indent: 24.003px;
+  position: absolute;
+  left: 9.875px;
+  top: 253.063px;
+  width: 198px;
+  height: 34px;
+  z-index: 9;
+}
+.矩形_5_拷贝_2 {
+  background-color: rgb( 213, 213, 213 );
+  position: absolute;
+  left: 0px;
+  top: 318px;
+  width: 635px;
+  height: 1px;
+  z-index: 8;
+}
+.请设置密码（6_12数字或字母） {
+  font-size: 36px;
+  font-family: "PingFang";
+  color: rgb( 185, 197, 226 );
+  text-transform: uppercase;
+  line-height: 0.405;
+  text-align: left;
+  text-indent: 24.003px;
+  position: absolute;
+  left: 9.875px;
+  top: 128.063px;
+  width: 450px;
+  height: 34px;
+  z-index: 7;
+}
+.矩形_5_拷贝 {
+  background-color: rgb( 213, 213, 213 );
+  position: absolute;
+  left: 0px;
+  top: 193px;
+  width: 635px;
+  height: 1px;
+  z-index: 6;
+}
+
+.矩形_5 {
+  background-color: rgb( 213, 213, 213 );
+  position: absolute;
+  left: 0px;
+  top: 64px;
+  width: 635px;
+  height: 1px;
+  z-index: 4;
+}

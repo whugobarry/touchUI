@@ -1,0 +1,83 @@
+<template>
+   <ui-view class="register">
+       <ui-view class="banner"></ui-view>
+       <ui-view class="bottom">
+           <ui-view class="main">
+               <ui-input type="tel" placeholder="请输入手机号" placeholder-class="ui-input-tip" maxlength="11"></ui-input>
+               <ui-sms-input init-text="获取验证码" bindsend="sendCode" placeholder-class="ui-input-tip"></ui-sms-input>
+               <ui-input type="password" placeholder="请设置新密码(6-12字母、数字组合)" placeholder-class="ui-input-tip" maxlength="12"></ui-input>
+               <ui-input type="password" placeholder="请确认新密码(6-12字母、数字组合)" placeholder-class="ui-input-tip" maxlength="12"></ui-input>
+               <ui-button type="primary" class="submit">提 交</ui-button>
+           </ui-view>
+       </ui-view>
+   </ui-view>
+</template>
+
+<script>
+export default {
+    config:{
+        "navigationStyle": "custom"
+    },
+    data(){
+        return {
+            phone:'',//手机号
+            password:'',//密码
+            agaginPwd:'',//确认密码
+            code:'',//验证码
+        }
+    },
+    methods:{
+        sendCode(run){
+            run()
+        }
+    }
+}
+</script>
+
+<style lang="less">
+    .ui-input-tip{
+        font-size: 36rpx;
+        font-family: "PingFang";
+        padding: 30rpx 0;
+    }
+    .ui-input-tip::-webkit-input-placeholder{
+        color: rgb( 185, 197, 226 );
+    }
+    .register{
+        width: 100%;
+        height: 100%;
+        .banner{
+            width: 100%;
+            height: 422rpx;
+            background: url('https://www.agamchain.com/static/ffb1d5cfdf7630431cb542a997229f27') no-repeat center center / 750rpx 422rpx;
+        }
+        .bottom{
+            width: 100%;
+            margin-top: 60rpx;
+            .main{
+                width: 570rpx;
+                margin: 0 auto;
+                .ui-input{
+                    border: none;
+                    border-bottom: 1px solid #eee;
+                    padding: 30rpx 0;
+                }
+                .ui-sms-input{
+                   border-bottom: 1px solid #eee;
+                   .cell-right{
+                       padding: 0;
+                   }
+                   .ui-input{
+                       border: none;
+                   }
+                    button{
+                        height: 66rpx;
+                    }
+                }
+                .submit{
+                    margin-top: 80rpx;
+                }
+            }
+        }
+    }
+</style>

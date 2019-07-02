@@ -1,0 +1,109 @@
+<template>
+   <ui-view class="register">
+       <ui-view class="banner"></ui-view>
+       <ui-view class="bottom">
+           <ui-view class="main">
+               <ui-input type="tel" placeholder="请输入手机号" ui:model="phone" placeholder-class="ui-input-tip" bindinput="phone_input" maxlength="11"></ui-input>
+               <ui-input type="password" placeholder="请输入密码(6-12字母、数字组合)" ui:model="password" placeholder-class="ui-input-tip" maxlength="12"></ui-input>
+               <ui-button type="primary" class="submit">登 录</ui-button>
+               <ui-row>
+                   <ui-col span="6">
+                       <ui-text bindtap="register">立即注册</ui-text>
+                   </ui-col>
+                   <ui-col span="6" style="text-align:right">
+                       <ui-text bindtap="forget">忘记密码</ui-text>
+                   </ui-col>
+               </ui-row>
+           </ui-view>
+       </ui-view>
+   </ui-view>
+</template>
+
+<script>
+export default {
+    config:{
+        "navigationStyle": "custom"
+    },
+    data(){
+        return {
+            phone:'',//手机号
+            password:'',//密码
+        }
+    },
+    methods:{
+        sendCode(run){
+            run()
+        },
+        // 手机号输入
+        phone_input(e){
+            
+        },
+        // 跳转到注册页面
+        register(){
+            ui.redirectTo({
+                url:'pages/login_register/register'
+            })
+        },
+        // 跳转到忘记密码页面
+        register(){
+            ui.redirectTo({
+                url:'pages/login_register/forget'
+            })
+        }
+    }
+}
+</script>
+
+<style lang="less">
+    .ui-input-tip{
+        font-size: 36rpx;
+        font-family: "PingFang";
+        padding: 30rpx 0;
+    }
+    .ui-input-tip::-webkit-input-placeholder{
+        color: rgb( 185, 197, 226 );
+    }
+    .register{
+        width: 100%;
+        height: 100%;
+        .banner{
+            width: 100%;
+            height: 422rpx;
+            background: url('https://www.agamchain.com/static/ffb1d5cfdf7630431cb542a997229f27') no-repeat center center / 750rpx 422rpx;
+        }
+        .bottom{
+            width: 100%;
+            margin-top: 60rpx;
+            .main{
+                width: 570rpx;
+                margin: 0 auto;
+                .ui-input{
+                    border: none;
+                    border-bottom: 1px solid #eee;
+                    padding: 30rpx 0;
+                }
+                .ui-sms-input{
+                   border-bottom: 1px solid #eee;
+                   .cell-right{
+                       padding: 0;
+                   }
+                   .ui-input{
+                       border: none;
+                   }
+                    button{
+                        height: 66rpx;
+                    }
+                }
+                .submit{
+                    margin-top: 80rpx;
+                }
+                .ui-text{
+                    font-size: 26rpx;
+                    font-family: "PingFang";
+                    color: rgb( 185, 197, 226 );
+
+                }
+            }
+        }
+    }
+</style>

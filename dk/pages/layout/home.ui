@@ -1,0 +1,164 @@
+<template>
+    <ui-view class="home">
+        <ui-view class="top">
+            <ui-view class="info_main">
+                <ui-row>
+                    <ui-col span="4" vertical-align="middle">
+                        <ui-view class="number">1880</ui-view>
+                        <ui-view class="info">AGC总数</ui-view>
+                    </ui-col>
+                    <ui-col span="4" vertical-align="middle">
+                        <ui-view class="number">80</ui-view>
+                        <ui-view class="info">今日打卡奖励</ui-view>
+                    </ui-col>
+                    <ui-col span="4" vertical-align="middle">
+                        <ui-view class="number">2</ui-view>
+                        <ui-view class="info">活跃度</ui-view>
+                    </ui-col>
+                </ui-row>
+            </ui-view>
+        </ui-view>
+        <ui-view class="content">
+            <ui-view class="progress"></ui-view>
+        </ui-view>
+    </ui-view>
+</template>
+
+<script>
+export default {
+    config:{
+        "navigationStyle":"custom"
+    }
+}
+</script>
+
+<style lang="less">
+    .home{
+        width: 100%;
+        height: 100%;
+        .top{
+            width: 100%;
+            margin-top: 20rpx;
+            .info_main{
+                height: 120rpx;
+                height: 120rpx;
+                border-radius: 10rpx;
+                background-color: rgb( 255, 255, 255 );
+                box-shadow: 0px 2rpx 12rpx 0px rgba( 59, 109, 250,.25 );
+                margin: 0 auto;
+                width: 690rpx;
+                .ui-row{
+                    height: 120rpx;
+                }
+                .ui-col{
+                    text-align: center;
+                    .number{
+                        font-size: 32rpx;
+                        font-family: "PingFang";
+                        color: rgb( 0, 0, 0 );
+                    }
+                    .info{
+                        font-size: 22rpx;
+                        font-family: "PingFang";
+                        color: rgb( 176, 176, 193 );
+                    }
+                }
+            }
+        }
+        .content{
+            width: 690rpx;
+            height: 690rpx;
+            margin: 30rpx auto 0;
+            border-radius: 50%;
+            .progress{
+                width: 340rpx;
+                height: 340rpx;
+                margin: 0 auto;
+            }
+        }
+    }
+</style>
+
+
+
+.数据 {
+  position: absolute;
+  left: 19px;
+  top: 139px;
+  width: 713px;
+  height: 143px;
+  z-index: 72;
+}
+._2 {
+  font-size: 32px;
+  font-family: "PingFang";
+  color: rgb( 0, 0, 0 );
+  position: absolute;
+  left: 576px;
+  top: 33.5px;
+  width: 16px;
+  height: 24px;
+  z-index: 71;
+}
+.活跃度 {
+  
+  position: absolute;
+  left: 552.797px;
+  top: 78.094px;
+  width: 64px;
+  height: 21px;
+  z-index: 70;
+}
+._80 {
+  
+  position: absolute;
+  left: 336px;
+  top: 33.5px;
+  width: 37px;
+  height: 25px;
+  z-index: 69;
+}
+.今日打卡奖励 {
+  font-size: 22px;
+  font-family: "PingFang";
+  color: rgb( 176, 176, 193 );
+  position: absolute;
+  left: 290.141px;
+  top: 78.094px;
+  width: 130px;
+  height: 21px;
+  z-index: 68;
+}
+._1880 {
+  font-size: 32px;
+  font-family: "PingFang";
+  color: rgb( 0, 0, 0 );
+  position: absolute;
+  left: 85.5px;
+  top: 33.5px;
+  width: 73px;
+  height: 25px;
+  z-index: 67;
+}
+.AGC总数 {
+  font-size: 22px;
+  font-family: "PingFang";
+  color: rgb( 176, 176, 193 );
+  position: absolute;
+  left: 80px;
+  top: 77.094px;
+  width: 91px;
+  height: 21px;
+  z-index: 66;
+}
+.圆角矩形_3 {
+  border-radius: 10px;
+  background-color: rgb( 255, 255, 255 );
+  box-shadow: 0px 2px 12px 0px rgb( 59, 109, 250 );
+  position: absolute;
+  left: 11px;
+  top: 9px;
+  width: 690px;
+  height: 120px;
+  z-index: 64;
+}
