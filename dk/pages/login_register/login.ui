@@ -1,11 +1,11 @@
 <template>
-   <ui-view class="register">
+   <ui-page class="register">
        <ui-view class="banner"></ui-view>
        <ui-view class="bottom">
            <ui-view class="main">
-               <ui-input type="tel" placeholder="请输入手机号" ui:model="phone" placeholder-class="ui-input-tip" bindinput="phone_input" maxlength="11"></ui-input>
-               <ui-input type="password" placeholder="请输入密码(6-12字母、数字组合)" ui:model="password" placeholder-class="ui-input-tip" maxlength="12"></ui-input>
-               <ui-button type="primary" class="submit">登 录</ui-button>
+               <ui-input type="tel" placeholder="请输入手机号" ui:model="{{phone}}" placeholder-class="ui-input-tip" maxlength="11"></ui-input>
+               <ui-input type="password" placeholder="请输入密码(6-12字母、数字组合)" ui:model="{{password}}" placeholder-class="ui-input-tip" maxlength="12"></ui-input>
+               <ui-button type="primary" class="submit" bindtap="submit">登 录</ui-button>
                <ui-row>
                    <ui-col span="6">
                        <ui-text bindtap="register">立即注册</ui-text>
@@ -16,10 +16,11 @@
                </ui-row>
            </ui-view>
        </ui-view>
-   </ui-view>
+   </ui-page>
 </template>
 
 <script>
+import {wx} from 'static/utils/util'
 export default {
     config:{
         "navigationStyle": "custom"
@@ -31,13 +32,6 @@ export default {
         }
     },
     methods:{
-        sendCode(run){
-            run()
-        },
-        // 手机号输入
-        phone_input(e){
-            
-        },
         // 跳转到注册页面
         register(){
             ui.redirectTo({
@@ -49,8 +43,86 @@ export default {
             ui.redirectTo({
                 url:'pages/login_register/forget'
             })
+        },
+        // 提交登录
+        submit(){
+            var app = this;
+            if(this.phone == ''){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"手机号不能为空"
+                })
+            }else if(this.phone.length != 11){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"手机号长度不符，请重新输入",
+                    buttonText:'重新输入',
+                    success(){
+                        app.phone = ''
+                    }
+                })
+            }else if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone))){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"手机号不符合要求，请重新输入",
+                    buttonText:'重新输入',
+                    success(){
+                        app.phone = ''
+                    }
+                })
+            }else if(this.password == ''){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"密码不能为空"
+                })
+            }else if(this.password.length < 6 || this.password.length > 12){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"密码长度不符，请重新输入",
+                    buttonText:'重新输入',
+                    success(){
+                        app.password = ''
+                    }
+                })
+            } else if(!(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/.test(this.password))){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"密码不符合要求，请重新输入",
+                    buttonText:'重新输入',
+                    success(){
+                        app.password = ''
+                    }
+                })
+            }else{
+                console.log(wx)
+                wx('/user/login',{
+                    "mobile":app.phone,
+                    "password":app.password
+                }).then((data)=>{
+                    console.log(data)
+                    if(data.code == 200){
+                        ui.showToast({ title: '登录成功', icon: 'success' })
+                        localStorage.setItem('auth_key',data.res.auth_key);
+                        localStorage.setItem('info',JSON.stringify({phone:data.res.mobile,invite:data.res.invitation_code}));
+                        // setTimeout(()=>{
+                            ui.redirectTo({
+                                url:'/pages/layout/home?key='+data.res.auth_key,
+                            })
+                        // },1500)
+                    } else if(data.code == 403){
+                        ui.showAlert({
+                            title:'温馨提示',
+                            content:data.msg,
+                            buttonText:'重新输入',
+                            success(){
+                                app.password = ''
+                            }
+                        })
+                    }
+                })
+            }
         }
-    }
+    },
 }
 </script>
 
@@ -66,6 +138,8 @@ export default {
     .register{
         width: 100%;
         height: 100%;
+        background: #fff;
+        top: 0!important;
         .banner{
             width: 100%;
             height: 422rpx;

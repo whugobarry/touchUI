@@ -23,7 +23,11 @@ export default {
       "borderColor": "rgba(231, 231, 231, 0.6)",
       "backgroundColor": "#fff",
       "list": [
-         
+         {
+          "pagePath": "pages/layout/home",
+          "iconName": "home",
+          "text": "首页"
+        },
       ]
     },
     "networkBaseUrl":""
@@ -123,6 +127,18 @@ export default {
   },
     // 初始化
   created () {
+    var key = localStorage.getItem('auth_key');
+    
+    if(key == null){
+      ui.redirectTo({
+        url:'/pages/login_register/login'
+      })
+    }else{
+      console.log(key)
+      ui.redirectTo({
+        url:'/pages/layout/home'
+      })
+    }
     this.initTab()
     this.initPaths()
     this.$nextTick(() => {
@@ -281,11 +297,13 @@ body {
 html,
 body {
     font-size: 12px;
+    background: #f3f5f8;
 }
 
 #ui-app {
     width: 100%;
     height: 100%;
+    background: #f3f5f8;
 }
 
 .touchui-hover{

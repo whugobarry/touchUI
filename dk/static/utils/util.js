@@ -30,7 +30,28 @@ function formatLocation (longitude, latitude) {
   }
 }
 
+function wx (url,data=[]){
+  console.log(data)
+  return new Promise((resolve,reject) => {
+    ui.request({
+      url:'https://server.agamchain.com/api'+url,
+      header:{
+        "Content-Type":"application/json"
+      },
+      data:data,
+      method:'post',
+      success(res){
+        resolve(res.data)
+      },
+      fail(res){
+        reject(res)
+      }
+    })
+  })
+}
+
 module.exports = {
   formatTime: formatTime,
-  formatLocation: formatLocation
+  formatLocation: formatLocation,
+  wx:wx
 }

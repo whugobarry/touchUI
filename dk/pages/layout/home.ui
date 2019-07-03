@@ -19,15 +19,55 @@
             </ui-view>
         </ui-view>
         <ui-view class="content">
-            <ui-view class="progress"></ui-view>
+            <ui-view class="progress">
+                <canvas id="canvas" width="170" height="170" style="width:100%;height:100%"></canvas>
+                <ui-view class="agc">
+                    <ui-view class="number">270000.00</ui-view>
+                    <ui-text class="title">AGC奖励</ui-text>
+                    <ui-view class="progre">{{progress}}%</ui-view>
+                </ui-view>
+            </ui-view>
+            <ui-view class="right">
+                <ui-view class="message"></ui-view>
+                <ui-view class="kyc"></ui-view>
+            </ui-view>
+            <ui-view class="top_bot">
+                <ui-col span="6" style="text-align:center">
+                    <ui-view class="num">70</ui-view>
+                    <ui-view class="tip">剩余打卡天数</ui-view>
+                </ui-col>
+                <ui-col span="6" style="text-align:center">
+                    <ui-view class="num">30</ui-view>
+                    <ui-view class="tip"> 已打卡天数</ui-view>
+                </ui-col>
+            </ui-view>
+            <ui-button class="clock">一键打卡</ui-button>
+        </ui-view>
+        <ui-view class="date">
+            <ui-view class="right">新手指引</ui-view>
+            <ui-view class="week">
+
+            </ui-view>
         </ui-view>
     </ui-view>
 </template>
 
 <script>
+require('static/utils/canvas.js')
+import { draw } from 'static/utils/wave.js'
 export default {
     config:{
         "navigationStyle":"custom"
+    },
+    data(){
+        return {
+            progress:30
+        }
+    },
+    mounted(){
+        var ctx = document.getElementById('canvas').getContext('2d');
+        console.log(ctx)
+        draw(ctx,this.progress)
     }
 }
 </script>
@@ -36,6 +76,7 @@ export default {
     .home{
         width: 100%;
         height: 100%;
+        background: #fff;
         .top{
             width: 100%;
             margin-top: 20rpx;
@@ -67,98 +108,123 @@ export default {
         }
         .content{
             width: 690rpx;
-            height: 690rpx;
+            padding-bottom: 10rpx;
             margin: 30rpx auto 0;
-            border-radius: 50%;
+            background: #fff;
+            position: relative;
+            border-bottom-left-radius: 20rpx;
+            border-bottom-right-radius: 20rpx;
             .progress{
                 width: 340rpx;
                 height: 340rpx;
                 margin: 0 auto;
+                position: relative;
+                .agc{
+                    position: absolute;
+                    top: 110rpx;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    font-size: 32rpx;
+                    font-family: "PingFang";
+                    color: rgb(0, 0, 0);
+                    font-weight: bold;
+                    text-align: center;
+                    .title{
+                        font-size: 22rpx;
+                    }
+                    .progre{
+                        margin-top: 40rpx;
+                        color:#fff;
+                    }
+                }
+            }
+            .right{
+                position: absolute;
+                right: 0;
+                top: 0;
+                .ui-view{
+                    width: 88rpx;
+                    height: 88rpx;
+                    border-radius: 50%;
+                    margin-bottom: 30rpx;
+                }
+                .message{
+                    background: url('https://www.agamchain.com/static/1b7e209f0d4b50ba1acf524e55f69eea') no-repeat center center / 88rpx 88rpx;
+                }
+                .kyc{
+                    background: url('https://www.agamchain.com/static/e6b78453102304b85b4f8d1fed5023d1') no-repeat center center / 88rpx 88rpx;
+                }
+            }
+            .top_bot{
+                margin-top: 30rpx;
+                .num{
+                    font-size: 12.728px;
+                    font-family: "PingFang";
+                    color: rgb(0, 0, 0);
+                }
+                .tip{
+                    font-size: 7.778px;
+                    font-family: "PingFang";
+                    color: rgb(176, 176, 193);
+                }   
+            }
+            .clock{
+                background: linear-gradient(-45deg, rgb(89,136,254) 1%, rgb(14,41,251) 100%);
+                background: -moz-linear-gradient( -45deg, rgb(89,136,254) 1%, rgb(14,41,251) 100%);
+                background: -webkit-linear-gradient( -45deg, rgb(89,136,254) 1%, rgb(14,41,251) 100%);
+                background: -ms-linear-gradient( -45deg, rgb(89,136,254) 1%, rgb(14,41,251) 100%);
+                width: 290rpx;
+                height: 88rpx;
+                border-radius: 44rpx;
+                margin-top: 40rpx;
+                position: relative;
+                left: 50%;
+                transform: translateX(-50%);
+                border: none;
+                outline: none;
+                color: #FFF;
+            }
+        }
+        .date{
+            width: 100%;
+            background: #f3f5f8;
+            padding-bottom: 40rpx;
+            .right{
+                width: 690rpx;
+                margin: 0 auto;
+                text-align: right;
+                text-decoration: underline;
+                font-size: 9px;
+                font-family: "PingFang";
+                color: rgb(176, 176, 193);
+                padding:20rpx 0;
+            }
+            .week{
+                width: 690rpx;
+                margin: 0 auto;
+                height: 370rpx;
+                background: url('https://www.agamchain.com/static/0bb17ecb045f0527e8cd672581601bf5') no-repeat center center / 680rpx 370rpx;
             }
         }
     }
 </style>
 
+.新手引导 {
+  font-size: 9px;
+  font-family: "PingFang";
+  color: rgb(176, 176, 193);
+  text-decoration: underline;
+  line-height: 1.2;
+  -moz-transform: matrix( 2.8283704992145,0,0,2.8283704992145,0,0);
+  -webkit-transform: matrix( 2.8283704992145,0,0,2.8283704992145,0,0);
+  -ms-transform: matrix( 2.8283704992145,0,0,2.8283704992145,0,0);
+  position: absolute;
+  left: 650.218px;
+  top: 914.478px;
+  z-index: 52;
+}
 
 
-.数据 {
-  position: absolute;
-  left: 19px;
-  top: 139px;
-  width: 713px;
-  height: 143px;
-  z-index: 72;
-}
-._2 {
-  font-size: 32px;
-  font-family: "PingFang";
-  color: rgb( 0, 0, 0 );
-  position: absolute;
-  left: 576px;
-  top: 33.5px;
-  width: 16px;
-  height: 24px;
-  z-index: 71;
-}
-.活跃度 {
-  
-  position: absolute;
-  left: 552.797px;
-  top: 78.094px;
-  width: 64px;
-  height: 21px;
-  z-index: 70;
-}
-._80 {
-  
-  position: absolute;
-  left: 336px;
-  top: 33.5px;
-  width: 37px;
-  height: 25px;
-  z-index: 69;
-}
-.今日打卡奖励 {
-  font-size: 22px;
-  font-family: "PingFang";
-  color: rgb( 176, 176, 193 );
-  position: absolute;
-  left: 290.141px;
-  top: 78.094px;
-  width: 130px;
-  height: 21px;
-  z-index: 68;
-}
-._1880 {
-  font-size: 32px;
-  font-family: "PingFang";
-  color: rgb( 0, 0, 0 );
-  position: absolute;
-  left: 85.5px;
-  top: 33.5px;
-  width: 73px;
-  height: 25px;
-  z-index: 67;
-}
-.AGC总数 {
-  font-size: 22px;
-  font-family: "PingFang";
-  color: rgb( 176, 176, 193 );
-  position: absolute;
-  left: 80px;
-  top: 77.094px;
-  width: 91px;
-  height: 21px;
-  z-index: 66;
-}
-.圆角矩形_3 {
-  border-radius: 10px;
-  background-color: rgb( 255, 255, 255 );
-  box-shadow: 0px 2px 12px 0px rgb( 59, 109, 250 );
-  position: absolute;
-  left: 11px;
-  top: 9px;
-  width: 690px;
-  height: 120px;
-  z-index: 64;
-}
+
+
+

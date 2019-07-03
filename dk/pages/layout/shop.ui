@@ -8,8 +8,71 @@
                 </ui-view>
             </ui-view>
             <ui-view class="list">
-
+                <ui-view class="heyue tiyan">
+                    <ui-view class="left">
+                        <ui-view class="title">体验合约(新人奖励)</ui-view>
+                        <ui-view class="tip">
+                            支付合约金0元，每天打卡领取AGC，AGC总奖励为145AGC
+                        </ui-view>
+                    </ui-view>
+                    <ui-view class="right">立即参与</ui-view>
+                </ui-view>
+                <ui-view class="heyue chuji">
+                    <ui-view class="left">
+                        <ui-view class="title">初级合约(20%收益)</ui-view>
+                        <ui-view class="tip">
+                            支付合约金1450AGC，每天打卡奖励AGC，总奖励数量为1740个AGC
+                        </ui-view>
+                    </ui-view>
+                    <ui-view class="right">立即参与</ui-view>
+                </ui-view>
+                <ui-view class="heyue zhongji">
+                    <ui-view class="left">
+                        <ui-view class="title">中级合约(20%收益)</ui-view>
+                        <ui-view class="tip">
+                            支付合约金7250AGC，每天打卡奖励AGC，总奖励数量为8700个AGC
+                        </ui-view>
+                    </ui-view>
+                    <ui-view class="right">立即参与</ui-view>
+                </ui-view>
+                <ui-view class="heyue gaoji">
+                    <ui-view class="left">
+                        <ui-view class="title">高级合约(30%收益)</ui-view>
+                        <ui-view class="tip">
+                            支付合约金1450AGC，每天打卡奖励AGC，总奖励数量为1740个AGC
+                        </ui-view>
+                    </ui-view>
+                    <ui-view class="right">立即参与</ui-view>
+                </ui-view>
+                <ui-view class="heyue jinjie">
+                    <ui-view class="left">
+                        <ui-view class="title">进阶合约(20%收益)</ui-view>
+                        <ui-view class="tip">
+                            支付合约金14500AGC，每天打卡奖励AGC，总奖励数量为8700个AGC
+                        </ui-view>
+                    </ui-view>
+                    <ui-view class="right">立即参与</ui-view>
+                </ui-view>
+                <ui-view class="heyue jingying">
+                    <ui-view class="left">
+                        <ui-view class="title">精英合约(20%收益)</ui-view>
+                        <ui-view class="tip">
+                            支付合约金1450AGC，每天打卡奖励AGC，总奖励数量为1740个AGC
+                        </ui-view>
+                    </ui-view>
+                    <ui-view class="right">立即参与</ui-view>
+                </ui-view>
+                <ui-view class="heyue zhuanjia">
+                    <ui-view class="left">
+                        <ui-view class="title">专家合约(36%收益)</ui-view>
+                        <ui-view class="tip">
+                            支付合约金1450AGC，每天打卡奖励AGC，总奖励数量为1740个AGC
+                        </ui-view>
+                    </ui-view>
+                    <ui-view class="right">立即参与</ui-view>
+                </ui-view>
             </ui-view>
+            <ui-view class="msg">AGC可以提现(USDT),1AGC=0.02USDT</ui-view>
         </ui-view>
     </ui-view>
 </template>
@@ -72,11 +135,102 @@ export default {
                 }
             }
             .list{
+                margin-top: 30rpx;
+                .heyue{
+                    width: 690rpx;
+                    height: 220rpx;
+                    margin-bottom: 30rpx;
+                    border-radius: 20rpx;
+                    .left{
+                        width: 450rpx;
+                        float: left;
+                        margin-left: 40rpx;
+                        .title{
+                            padding-top: 20rpx;
+                            color: #fff;
+                            font-size: 36rpx;
+                            font-family: "PingFang";
+                        }
+                        .tip{
+                            margin-top: 20rpx;
+                            font-size: 24rpx;
+                            color:rgba(255, 255, 255, 0.6);
+                        }
+                    }
+                    .right{
+                        float: right;
+                        width: 156rpx;
+                        height: 58rpx;
+                        border-radius: 29rpx;
+                        font-size: 30rpx;
+                        font-family: "PingFang";
+                        color: rgb(255, 173, 18);
+                        background-color: rgb(255, 255, 255);
+                        box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(255, 139, 0, 0.3);
+                        margin-top: 80rpx;
+                        margin-right: 40rpx;
+                        text-align: center;
+                        line-height: 58rpx;
+                    }
+                }
+                .tiyan{
+                    background: url('https://www.agamchain.com/static/9075e40adf0f5fe9cfa9f9b5e476aad9') no-repeat center center / 690rpx 220rpx;
+                    .right{
+                        box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(1, 19, 199, 0.32);
+                        color: rgb(14, 41, 251);
+                    }
+                }
+                .chuji{
+                    background: url('https://www.agamchain.com/static/fa57ddad874a52f601e51fa3eeee00e3') no-repeat center center / 690rpx 220rpx;
+                    .right{
+                        color: rgb(14, 41, 251);
+                        box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(84, 63, 237, 0.3);
+                    }
+                }
+                .zhongji{
+                    background: url('https://www.agamchain.com/static/fa57ddad874a52f601e51fa3eeee00e3') no-repeat center center / 690rpx 220rpx;
+                    .right{
+                        color: rgb(14, 41, 251);
+                        box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(84, 63, 237, 0.3);
+                    }
+                }
+                .gaoji{
+                    background: url('https://www.agamchain.com/static/5e409879213653448590e477aac033af') no-repeat center center / 690rpx 220rpx;
 
+                }
+                .jinjie{
+                    background: url('https://www.agamchain.com/static/fa57ddad874a52f601e51fa3eeee00e3') no-repeat center center / 690rpx 220rpx;
+                    .right{
+                        color: rgb(14, 41, 251);
+                        box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(84, 63, 237, 0.3);
+                    }
+                }
+                .jingying{
+                    background: url('https://www.agamchain.com/static/fa57ddad874a52f601e51fa3eeee00e3') no-repeat center center / 690rpx 220rpx;
+                    .right{
+                        color: rgb(14, 41, 251);
+                        box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(84, 63, 237, 0.3);
+                    }
+                }
+                .zhuanjia{
+                    background: url('https://www.agamchain.com/static/5e409879213653448590e477aac033af') no-repeat center center / 690rpx 220rpx;
+                }
+
+            }
+            .msg{
+                margin-top: 40rpx;
+                font-size: 28rpx;
+                color: rgb(153, 153, 153);
+                text-align: center;
             }
         }
     }
 </style>
+
+
+
+
+
 
 
 
