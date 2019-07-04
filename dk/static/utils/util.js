@@ -49,9 +49,15 @@ function wx (url,data=[]){
     })
   })
 }
+var params = query();
+function query() {
+  var url = window.location.href;
+  console.log(url)
+}
 
 module.exports = {
   formatTime: formatTime,
   formatLocation: formatLocation,
-  wx:wx
+  wx:wx,
+  $_GET:params
 }

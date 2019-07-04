@@ -3,17 +3,19 @@
        <ui-view class="banner"></ui-view>
        <ui-view class="bottom">
            <ui-view class="main">
-               <ui-input type="tel" placeholder="请输入手机号" placeholder-class="ui-input-tip" maxlength="11"></ui-input>
+               <ui-input type="tel" placeholder="请输入手机号" ui:model="{{phone}}" placeholder-class="ui-input-tip" maxlength="11"></ui-input>
                <ui-sms-input init-text="获取验证码" bindsend="sendCode" placeholder-class="ui-input-tip"></ui-sms-input>
-               <ui-input type="password" placeholder="请设置新密码(6-12字母、数字组合)" placeholder-class="ui-input-tip" maxlength="12"></ui-input>
-               <ui-input type="password" placeholder="请确认新密码(6-12字母、数字组合)" placeholder-class="ui-input-tip" maxlength="12"></ui-input>
-               <ui-button type="primary" class="submit">提 交</ui-button>
+               <ui-input type="number" id="code" placeholder="请输入验证码" ui:model="{{code}}" placeholder-class="ui-input-tip" maxlength="11"></ui-input>
+               <ui-input type="password" placeholder="请设置新密码(6-12字母、数字组合)" ui:model="{{password}}" placeholder-class="ui-input-tip" maxlength="12"></ui-input>
+               <ui-input type="password" placeholder="请确认新密码(6-12字母、数字组合)" ui:model="{{againPwd}}" placeholder-class="ui-input-tip" maxlength="12"></ui-input>
+               <ui-button type="primary" class="submit" bindtap="submit">提 交</ui-button>
            </ui-view>
        </ui-view>
    </ui-view>
 </template>
 
 <script>
+import {wx} from 'static/utils/util.js'
 export default {
     config:{
         "navigationStyle": "custom"
@@ -22,13 +24,129 @@ export default {
         return {
             phone:'',//手机号
             password:'',//密码
-            agaginPwd:'',//确认密码
+            againPwd:'',//确认密码
             code:'',//验证码
         }
     },
     methods:{
         sendCode(run){
-            run()
+            if(this.phone == '' || !(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone))){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"手机号为空或不符合要求，请重新输入",
+                    buttonText:'重新输入',
+                    success(){
+                        app.phone = ''
+                    }
+                })
+            } else {
+                wx('/user/send',{
+                    mobile:this.phone,
+                    type:'reset'
+                }).then((data)=>{
+                    if(data.code == 403){
+                        ui.showAlert({
+                            title:'温馨提示',
+                            content:data.msg,
+                        })
+                    }else if(data.code == 200){
+                        ui.showToast({ title: '已发送', icon: 'success' })
+                        run();
+                    }
+                })
+            }
+        },
+        submit(){
+            var app = this;
+            if(this.phone == ''){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"手机号不能为空"
+                })
+            }else if(this.phone.length != 11){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"手机号长度不符，请重新输入",
+                    buttonText:'重新输入',
+                    success(){
+                        app.phone = ''
+                    }
+                })
+            }else if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone))){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"手机号不符合要求，请重新输入",
+                    buttonText:'重新输入',
+                    success(){
+                        app.phone = ''
+                    }
+                })
+            }else if(this.code == ''){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"验证码不能为空，请重新输入",
+                    buttonText:'重新输入',
+                })
+            }else if(this.code.length != 6){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"验证码长度不符合要求，请重新输入",
+                    buttonText:'重新输入',
+                    success(){
+                        app.code = ''
+                    }
+                })
+            }else if(this.password == ''){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"密码不能为空"
+                })
+            }else if(this.password.length < 6 || this.password.length > 12){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"密码长度不符，请重新输入",
+                    buttonText:'重新输入',
+                    success(){
+                        app.password = ''
+                    }
+                })
+            } else if(!(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/.test(this.password))){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"密码不符合要求，请重新输入",
+                    buttonText:'重新输入',
+                    success(){
+                        app.password = ''
+                    }
+                })
+            }else if(this.againPwd != this.password){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:"两次密码不一致，请重新输入",
+                    buttonText:'重新输入',
+                })
+            }else{
+                console.log(wx)
+                wx('/user/reset',{
+                    "mobile":app.phone,
+                    code:app.code,
+                    "password":app.password,
+                    confirm_password:app.againPwd   
+                }).then((data)=>{
+                    console.log(data)
+                    if(data.code == 200){
+                        ui.showToast({ title: '改密成功', icon: 'success' })
+                        ui.redirectTo({
+                            url:'/pages/login_register/login',
+                        })
+                    } else if(data.code == 403){
+                        ui.showAlert({
+                            title:'温馨提示',
+                            content:data.msg,
+                        })
+                    }
+                })
+            }
         }
     }
 }
@@ -43,9 +161,18 @@ export default {
     .ui-input-tip::-webkit-input-placeholder{
         color: rgb( 185, 197, 226 );
     }
+    #code{
+        position: absolute;
+        top: 162rpx;
+        padding-top: 0;
+        width: 320rpx;
+        // border-bottom: 1px solid #eee;
+        border: none;
+    }
     .register{
         width: 100%;
         height: 100%;
+        background: url('https://www.agamchain.com/static/9c1385517cbc8860981a2e72e3ad310f') repeat;
         .banner{
             width: 100%;
             height: 422rpx;
@@ -57,6 +184,7 @@ export default {
             .main{
                 width: 570rpx;
                 margin: 0 auto;
+                position: relative;
                 .ui-input{
                     border: none;
                     border-bottom: 1px solid #eee;

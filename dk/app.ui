@@ -6,7 +6,8 @@ export default {
       "pages/login_register/login",
       "pages/login_register/forget",
       "pages/layout/home",
-      "pages/layout/shop"
+      "pages/layout/shop",
+      "pages/message/message"
     ],
     "theme": {
       "theme-color": "#0e29fb"
@@ -16,19 +17,6 @@ export default {
       "navigationBarBackgroundColor":"#ffffff",
       "navigationBarTextStyle":"black",
       "navigationBarBorderColor":"rgba(231, 231, 231, 0.6)"
-    },
-    "tabBar": {
-      "color": "#7a7e83",
-      "selectedColor": "#39f",
-      "borderColor": "rgba(231, 231, 231, 0.6)",
-      "backgroundColor": "#fff",
-      "list": [
-         {
-          "pagePath": "pages/layout/home",
-          "iconName": "home",
-          "text": "首页"
-        },
-      ]
     },
     "networkBaseUrl":""
   },

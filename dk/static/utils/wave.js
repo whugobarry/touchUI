@@ -1,12 +1,13 @@
-var draw = function (ctx,data){
+var draw = function (ctx,data,radtio){
+  var ratio  = radtio;
   var ctx = ctx;
   var data = data;
         var rangeValue = data;
         var nowRange = 0;
 
-        var mW = canvas.width = 340;
-        var mH = canvas.height = 340;
-        var lineWidth = 0.5;
+        var mW = canvas.width = 340 * ratio;
+        var mH = canvas.height = 340 * ratio;
+        var lineWidth = 1;
 
         var r = mH / 2;
         var cR = r - 32 * lineWidth;
@@ -22,12 +23,15 @@ var draw = function (ctx,data){
 
         var IsdrawCircled = false;
         var drawCircle = function(){
-            ctx.lineWidth = 10
+            
+            // ctx.globalCompositeOperation = 'source-over';
+            ctx.lineWidth = 20 * ratio;
             ctx.beginPath();
-            ctx.strokeStyle = '#0e29fb';
-            ctx.arc(r, r, cR+1, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#4974fd';
+            ctx.arc(r, r, cR, 0, 2 * Math.PI);
             ctx.stroke();
             ctx.beginPath();
+            
             ctx.arc(r, r, cR, 0, 2 * Math.PI);
             ctx.clip();
             IsdrawCircled = true;
@@ -40,9 +44,9 @@ var draw = function (ctx,data){
 
             ctx.beginPath();
             //在整个轴长上取点
-            for(var x = sX; x < sX + axisLength; x += 20 / axisLength){
+            for(var x = sX; x < sX + axisLength * ratio; x += 20 * radtio / axisLength){
                 //此处坐标(x,y)的取点，依靠公式 “振幅高*sin(x*振幅宽 + 振幅偏移量)”
-                var y = Math.sin((-sX - x) * waveWidth + xOffset) * 0.8 + 0.1;
+                var y = Math.sin((-sX - x) * waveWidth + xOffset) * 0.8 * ratio + 0.1;
 
                 var dY = mH * (1 - nowRange / 100 );
 
@@ -79,26 +83,13 @@ var draw = function (ctx,data){
                 nowRange -= tmp;
             }
 
-            drawSin(xOffset+Math.PI*0.7, '#5988fe', 18);
-            drawSin(xOffset, '#375dfd', 18);
+            drawSin(xOffset+Math.PI*0.7, 'rgba(55,93,253,.4)', 18);
+            drawSin(xOffset, 'rgba(55,93,253,.6)', 18);
             // drawText(); 
 
             xOffset += speed;
             requestAnimationFrame(render);
         }
-
-        var drawText = function(){
-            ctx.save();
-
-            var size = 0.4*cR;
-            ctx.font = size + 'px Microsoft Yahei';
-            ctx.textAlign = 'center';
-            ctx.fillStyle = "rgba(06, 85, 128, 0.5)";
-            ctx.fillText(~~nowRange + '%', r, r + size / 2);
-
-            ctx.restore();
-        };
-
         render();
 }
 

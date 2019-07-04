@@ -31,17 +31,25 @@ export default {
             password:'',//密码
         }
     },
+    created(){
+        var key = localStorage.getItem('auth_key');
+        // if(key != null){
+        //     ui.redirectTo({
+        //         url:'/pages/layout/home'
+        //     })
+        // }
+    },
     methods:{
         // 跳转到注册页面
         register(){
             ui.redirectTo({
-                url:'pages/login_register/register'
+                url:'/pages/login_register/register'
             })
         },
         // 跳转到忘记密码页面
-        register(){
+        forget(){
             ui.redirectTo({
-                url:'pages/login_register/forget'
+                url:'/pages/login_register/forget'
             })
         },
         // 提交登录
@@ -106,7 +114,7 @@ export default {
                         localStorage.setItem('info',JSON.stringify({phone:data.res.mobile,invite:data.res.invitation_code}));
                         // setTimeout(()=>{
                             ui.redirectTo({
-                                url:'/pages/layout/home?key='+data.res.auth_key,
+                                url:'/pages/layout/home',
                             })
                         // },1500)
                     } else if(data.code == 403){
@@ -138,7 +146,7 @@ export default {
     .register{
         width: 100%;
         height: 100%;
-        background: #fff;
+        background: url('https://www.agamchain.com/static/9c1385517cbc8860981a2e72e3ad310f') repeat;
         top: 0!important;
         .banner{
             width: 100%;

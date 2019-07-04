@@ -1,0 +1,71 @@
+<template>
+    <ui-view class="message">
+        <ui-view class="list">
+            <ui-view class="top">
+                <ui-view class="icon_message"></ui-view>
+                <ui-text class="title">系统消息</ui-text>
+            </ui-view>
+            <ui-view class="center">
+                <ui-text class="info">KYC认证结果：恭喜您完成KYC认证通过。</ui-text>
+            </ui-view>
+        </ui-view>
+    </ui-view>
+</template>
+
+<script>
+export default {
+    config:{
+        "navigationStyle":'custom'
+    },
+    
+}
+</script>
+
+<style lang="less">
+    .list{
+        width: 690rpx;
+        margin: 0 auto;
+        height: 240rpx;
+        border-radius: 20rpx;
+        background-color: rgb(255, 255, 255);
+        box-shadow: 0px 6rpx 10rpx 0px rgba(0, 0, 0, 0.02);
+        margin-top: 20rpx;
+        .top{
+            width: 610rpx;
+            margin: 0 auto;
+            padding: 30rpx 0;
+            border-bottom: 1px solid #f6f6f6;
+            .icon_message{
+                display: inline-block;
+                width: 37rpx;
+                height: 38rpx;
+                background: url('https://www.agamchain.com/static/33a46981f02bf62c9c47bcfd2d9d9ec2') no-repeat center center / 37rpx 38rpx;
+                vertical-align: text-bottom;
+            }
+            .title{
+                font-size: 32rpx;
+                font-family: "PingFang";
+                color: rgb(7, 18, 40);
+            }   
+        }
+        .info{
+            font-size: 28r px;
+            font-family: "PingFang";
+            color: rgb(102, 102, 102);
+        }
+    }
+</style>
+
+. {
+  
+  line-height: 1.2;
+  text-align: left;
+  position: absolute;
+  left: 69.937px;
+  top: 283.822px;
+  z-index: 16;
+}
+
+
+
+
