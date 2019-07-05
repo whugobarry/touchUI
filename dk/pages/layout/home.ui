@@ -49,9 +49,9 @@
             <ui-view class="right">新手指引</ui-view>
             <ui-view class="week">
                 <ui-view class="weekDate">
-                    <ui-view class="icon left"></ui-view>2019.07<ui-view class="icon right"></ui-view>
+                    <ui-view class="icon left"></ui-view>{{currentDate}}<ui-view class="icon right"></ui-view>
                 </ui-view>
-                <ui-w-calendar value="2019/7/30" class="calendar"></ui-w-calendar>
+                <ui-w-calendar value="{{currentValue}}" class="calendar"></ui-w-calendar>
                 <ui-view class="lend">
                     <ui-view class="right_week">
                         <ui-view class="circle gray"></ui-view>
@@ -80,6 +80,12 @@ export default {
             progress:0,
             info:'',//打卡信息
             date:[],//日历区间
+            month:["Jan","Feb","Mar","Apr","May","June","July","Aug","Sept","Oct","Nov","Dec"],//月份简称
+            currentDate:'',//当前日期
+            currentMonth:'',//当前月份
+            currentYear:'',//当前年份
+            currentDay:'',//当前日
+            currentValue:'',//当前选中时间
         }
     },
     created(){
@@ -88,6 +94,13 @@ export default {
         if(key != null && info != null){
             info = JSON.parse(info)
             console.log(info)
+            var current = new Date();
+            this.currentMonth = current.getMonth() + 1 < 10 ? '0'+(current.getMonth() + 1):current.getMonth() + 1;
+            var currentMonth = this.month[current.getMonth()];
+            this.year = current.getFullYear();
+            this.currentDay = current.getDate();
+            this.currentDate = currentMonth+' '+this.year
+            this.currentValue = this.year+'/'+this.currentMonth+'/'+this.currentDay
             wx('/contract/home?auth_key='+key,{
                 mobile:info.phone
             }).then((data)=>{
@@ -109,8 +122,11 @@ export default {
                     var ctx = document.getElementById('canvas').getContext('2d');
                     console.log(ctx)
                     draw(ctx,this.progress,window.devicePixelRatio)
+                    data.res.start = data.res.start.replace(/\-/g,"/").substr(0,7);
+                    data.res.end = data.res.end.replace(/\-/g,"/").substr(0,7);
                     this.date.push(data.res.start);
                     this.date.push(data.res.end);
+                    // var dt = 
                 }else if(data.code == 403){
                     var ctx = document.getElementById('canvas').getContext('2d');
                     console.log(ctx)
@@ -224,19 +240,19 @@ export default {
             }
             .right{
                 position: absolute;
-                right: 0;
+                right: -30rpx;
                 top: 0;
                 .ui-view{
-                    width: 88rpx;
-                    height: 88rpx;
+                    width: 106rpx;
+                    height: 106rpx;
                     border-radius: 50%;
                     margin-bottom: 30rpx;
                 }
                 .message{
-                    background: url('https://www.agamchain.com/static/1b7e209f0d4b50ba1acf524e55f69eea?pic') no-repeat center center / 88rpx 88rpx;
+                    background: url('https://www.agamchain.com/static/1b7e209f0d4b50ba1acf524e55f69eea') no-repeat center center / 106rpx 106rpx;
                 }
                 .kyc{
-                    background: url('https://www.agamchain.com/static/e6b78453102304b85b4f8d1fed5023d1?pic') no-repeat center center / 88rpx 88rpx;
+                    background: url('https://www.agamchain.com/static/e6b78453102304b85b4f8d1fed5023d1') no-repeat center center / 106rpx 106rpx;
                 }
             }
             .top_bot{
@@ -272,7 +288,7 @@ export default {
         .date{
             width: 100%;
             background: #f3f5f8;
-            padding-bottom: 40rpx;
+            padding-bottom: 175rpx;
             .right{
                 width: 690rpx;
                 margin: 0 auto;
@@ -284,10 +300,10 @@ export default {
                 padding:20rpx 0;
             }
             .week{
-                width: 690rpx;
+                width: 750rpx;
                 margin: 0 auto;
                 height: 370rpx;
-                // background: url('https://www.agamchain.com/static/0bb17ecb045f0527e8cd672581601bf5') no-repeat center center / 680rpx 370rpx;
+                background: url('https://www.agamchain.com/static/a0a25420dad8690ff25e64b92bdbf3f2') no-repeat center center / 750rpx 392rpx;
                 .weekDate{
                     padding-top: 20rpx;
                     text-align: center;
@@ -296,7 +312,7 @@ export default {
                     color: rgb(51, 51, 51);
                 }
                 .calendar{
-                    width: 670rpx;
+                    width: 740rpx;
                     position: relative;
                     margin: 0 auto;
                 }
@@ -309,8 +325,8 @@ export default {
                     color: #000;
                 }
                 .is-selected{
-                    background: rgba(0,0,0,0);
-                    color: #000;
+                    // background: rgba(0,0,0,0);
+                    color: #00d094;
                 }
                 .icon{
                     display: inline-block;

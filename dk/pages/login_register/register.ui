@@ -62,7 +62,7 @@ export default {
             }
         },
         login(){
-            ui.rediretTo({
+            ui.redirectTo({
                 url:'/pages/login_register/login'
             })
         },

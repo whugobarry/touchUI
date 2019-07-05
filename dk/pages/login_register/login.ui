@@ -111,7 +111,7 @@ export default {
                     if(data.code == 200){
                         ui.showToast({ title: '登录成功', icon: 'success' })
                         localStorage.setItem('auth_key',data.res.auth_key);
-                        localStorage.setItem('info',JSON.stringify({phone:data.res.mobile,invite:data.res.invitation_code}));
+                        localStorage.setItem('info',JSON.stringify({uid:data.res.id,phone:data.res.mobile,invite:data.res.invitation_code}));
                         // setTimeout(()=>{
                             ui.redirectTo({
                                 url:'/pages/layout/home',
