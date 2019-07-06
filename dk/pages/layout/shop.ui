@@ -2,29 +2,27 @@
     <ui-view class="shop">
         <ui-view class="main">
             <ui-view class="menu">
-                <ui-view class="tab">
-                    <ui-view class="left active">合约商城</ui-view>
-                    <ui-view class="right">我的合约</ui-view>
+                <ui-view class="tab" style="box-shadow:none">
+                    <ui-view class="{{['left',{active: active == 0}]}}" bindtap="activ(0)">合约商城</ui-view>
+                    <ui-view class="{{['right',{active: active == 1}]}}" bindtap="activ(1)">我的合约</ui-view>
                 </ui-view>
             </ui-view>
-            <ui-view class="list">
-                <ui-view class="heyue tiyan">
+            <ui-view class="list" ui:for="{{contract}}">
+                <ui-view class="heyue" style="{{{background:'url('+item.pic+') no-repeat'}}}">
                     <ui-view class="left">
-                        <ui-view class="title">体验合约(新人奖励)</ui-view>
+                        <ui-view class="title">{{item.name}}</ui-view>
                         <ui-view class="tip">
-                            支付合约金0元，每天打卡领取AGC，AGC总奖励为145AGC
+                            {{item.msg}}
                         </ui-view>
                     </ui-view>
-                    <ui-view class="right">立即参与</ui-view>
                 </ui-view>
-                <ui-view class="heyue chuji">
+                <!-- <ui-view class="heyue chuji">
                     <ui-view class="left">
                         <ui-view class="title">初级合约(20%收益)</ui-view>
                         <ui-view class="tip">
                             支付合约金1450AGC，每天打卡奖励AGC，总奖励数量为1740个AGC
                         </ui-view>
                     </ui-view>
-                    <ui-view class="right">立即参与</ui-view>
                 </ui-view>
                 <ui-view class="heyue zhongji">
                     <ui-view class="left">
@@ -33,7 +31,6 @@
                             支付合约金7250AGC，每天打卡奖励AGC，总奖励数量为8700个AGC
                         </ui-view>
                     </ui-view>
-                    <ui-view class="right">立即参与</ui-view>
                 </ui-view>
                 <ui-view class="heyue gaoji">
                     <ui-view class="left">
@@ -42,7 +39,6 @@
                             支付合约金1450AGC，每天打卡奖励AGC，总奖励数量为1740个AGC
                         </ui-view>
                     </ui-view>
-                    <ui-view class="right">立即参与</ui-view>
                 </ui-view>
                 <ui-view class="heyue jinjie">
                     <ui-view class="left">
@@ -51,7 +47,6 @@
                             支付合约金14500AGC，每天打卡奖励AGC，总奖励数量为8700个AGC
                         </ui-view>
                     </ui-view>
-                    <ui-view class="right">立即参与</ui-view>
                 </ui-view>
                 <ui-view class="heyue jingying">
                     <ui-view class="left">
@@ -60,7 +55,6 @@
                             支付合约金1450AGC，每天打卡奖励AGC，总奖励数量为1740个AGC
                         </ui-view>
                     </ui-view>
-                    <ui-view class="right">立即参与</ui-view>
                 </ui-view>
                 <ui-view class="heyue zhuanjia">
                     <ui-view class="left">
@@ -69,8 +63,7 @@
                             支付合约金1450AGC，每天打卡奖励AGC，总奖励数量为1740个AGC
                         </ui-view>
                     </ui-view>
-                    <ui-view class="right">立即参与</ui-view>
-                </ui-view>
+                </ui-view> -->
             </ui-view>
             <ui-view class="msg">AGC可以提现(USDT),1AGC=0.02USDT</ui-view>
         </ui-view>
@@ -78,9 +71,52 @@
 </template>
 
 <script>
+import {wx} from 'static/utils/util.js'
 export default {
     config:{
         navigationStyle:'custom'
+    },
+    data () {
+        return {
+            contract:'',//合约列表
+            active:0,
+        }
+    },
+    created(){
+        var key = localStorage.getItem('auth_key');
+        var info = localStorage.getItem('info');
+        if(key == null){
+            ui.redirectTo({
+                url:'/pages/login_register/login'
+            })
+        }
+        wx('/contract/all?auth_key='+key,{
+            mobile:JSON.parse(localStorage.getItem('info')).phone
+        }).then((data)=>{
+            console.log(data)
+            if(data.code == 200){
+                this.contract = data.res;
+            }else if(data.code == 403){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:data.msg
+                })
+            }else if(data.code == 402){
+                ui.showAlert({
+                    content:data.msg,
+                    success(){
+                        ui.redirectTo({
+                            url:'/pages/login_register/login'
+                        })
+                    }
+                })
+            }
+        })
+    },
+    methods:{
+        activ(id){
+            this.active = id;
+        }
     }
 }
 </script>
@@ -90,6 +126,7 @@ export default {
         width: 100%;
         height: 100%;
         background: #f3f5f8;
+        padding-bottom: 150rpx;
         .main{
             padding-top: 20rpx;
             width: 690rpx;
@@ -142,9 +179,8 @@ export default {
                     margin-bottom: 30rpx;
                     border-radius: 20rpx;
                     .left{
-                        width: 450rpx;
-                        float: left;
-                        margin-left: 40rpx;
+                        width: 610rpx;
+                        margin:0 auto;
                         .title{
                             padding-top: 20rpx;
                             color: #fff;

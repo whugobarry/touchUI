@@ -28,8 +28,10 @@
                 </ui-view>
             </ui-view>
             <ui-view class="right">
-                <ui-view class="message"></ui-view>
-                <ui-view class="kyc"></ui-view>
+                <ui-view class="message" bindtap="message">
+                    <ui-badge text="{{msglen}}" class="badage" ui:if="{{transition}}" ui:show="{{msglen == 0 ? false : true}}" maxlength="2"></ui-badge>
+                </ui-view>
+                <ui-view class="kyc" bindtap="KYC" ui:show="{{kycstatus == false ? true : false}}"></ui-view>
             </ui-view>
             <ui-view class="top_bot">
                 <ui-col span="6" style="text-align:center">
@@ -86,6 +88,9 @@ export default {
             currentYear:'',//当前年份
             currentDay:'',//当前日
             currentValue:'',//当前选中时间
+            msglen:0,
+            transition:true,
+            kycstatus:true,//审核状态
         }
     },
     created(){
@@ -107,7 +112,6 @@ export default {
                 console.log(data);
                 if(data.code == 405){
                     ui.showAlert({
-                        title:'温馨提示',
                         content:data.msg,
                         success(){
                             localStorage.clear();
@@ -126,6 +130,15 @@ export default {
                     data.res.end = data.res.end.replace(/\-/g,"/").substr(0,7);
                     this.date.push(data.res.start);
                     this.date.push(data.res.end);
+                    if(data.res.new_msg != 0){
+                        this.transition = true;
+                        this.transitions();
+                    }
+                    if(data.res.new_msg > 99){
+                        data.res.new_msg = '...'
+                    }
+                    this.msglen = data.res.new_msg;
+                    this.kycstatus = data.res.kyc;
                     // var dt = 
                 }else if(data.code == 403){
                     var ctx = document.getElementById('canvas').getContext('2d');
@@ -149,6 +162,33 @@ export default {
             ui.redirectTo({
                 url:'/pages/login_register/login'
             })
+        }
+    },
+    methods:{
+        message(){
+            ui.navigateTo({
+                url:'/pages/message/message'
+            })
+        },
+        KYC(){
+            ui.navigateTo({
+                url:'/pages/auth/kyc'
+            })
+        },
+        transitions(){
+            var app = this;
+            var timer = setInterval(()=>{
+                if(app.msglen == 0){
+                    clearInterval(timer);
+                    return;
+                }else{
+                    if(app.transition){
+                        app.transition = false
+                    }else{
+                        app.transition = true;
+                    }
+                } 
+            },400)
         }
     },
     mounted(){
@@ -249,6 +289,7 @@ export default {
                     margin-bottom: 30rpx;
                 }
                 .message{
+                    position: relative;
                     background: url('https://www.agamchain.com/static/1b7e209f0d4b50ba1acf524e55f69eea') no-repeat center center / 106rpx 106rpx;
                 }
                 .kyc{
@@ -284,6 +325,12 @@ export default {
                 outline: none;
                 color: #FFF;
             }
+        }
+        .badage{
+            position: absolute;
+            right: 15rpx;
+            top: 15rpx;
+            font-weight: bolder;
         }
         .date{
             width: 100%;

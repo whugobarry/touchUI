@@ -30,16 +30,18 @@ function formatLocation (longitude, latitude) {
   }
 }
 
-function wx (url,data=[]){
+function wx (url,data=[],header={"Content-Type":"application/json"}){
   console.log(data)
+  // console.log(data.get('mobile'))
+  console.log(header)
   return new Promise((resolve,reject) => {
     ui.request({
       url:'https://server.agamchain.com/api'+url,
-      header:{
-        "Content-Type":"application/json"
-      },
+      header:header,
       data:data,
-      method:'post',
+      processData:false,
+      contentType:false,
+      method:'POST',
       success(res){
         resolve(res.data)
       },

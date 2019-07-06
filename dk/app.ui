@@ -7,7 +7,9 @@ export default {
       "pages/login_register/forget",
       "pages/layout/home",
       "pages/layout/shop",
-      "pages/message/message"
+      "pages/message/message",
+      "pages/message/info",
+      "pages/auth/kyc"
     ],
     "theme": {
       "theme-color": "#0e29fb"
@@ -36,7 +38,8 @@ export default {
       paths: [],
       barHeight: ui.STATUS_BAR_HEIGHT,
       showSlideMenu:false,
-      active:3,
+      active:2,
+      footer:true
     }
   },
   computed: {
@@ -113,6 +116,9 @@ export default {
       this.handleIosGesture()
       this.initTab()
       this.initBodyStyle()
+      if(path != '/pages/layout/shop' && path != '/pages/layout/home' && path != '/pages/layout/c2c'){
+        this.footer = false;
+      }
     },
     active(data){
       console.log(data)
@@ -285,24 +291,24 @@ export default {
     </ui-tab-bar>
   </ui-view>
   </ui-slide-menu>
-  <ui-view class="tab">
-    <ui-view class="span_20" bindtap="actives(0)" class="{{{active:active == 0 ? true : false}}}">
-      <ui-view class="icon tuiguang" data-active="0"></ui-view>
+  <ui-view class="tab" ui:if="{{footer}}">
+    <ui-view class="span_20" bindtap="actives(0)">
+      <ui-view class="{{['icon','tuiguang',{active:active == 0}]}}" data-active="0"></ui-view>
     </ui-view>
     <ui-view class="span_20" bindtap="actives(1)">
-      <ui-view class="icon shop"></ui-view>
+      <ui-view class="{{['icon','shop',{active:active == 1}]}}"></ui-view>
     </ui-view>
     <ui-view class="span_20" bindtap="actives(2)">
       <ui-view class="bg"></ui-view>
       <ui-view class="circle">
-        <ui-view class="icon home"></ui-view>
+        <ui-view class="{{['icon','home',{active:active == 2}]}}"></ui-view>
       </ui-view>
     </ui-view>
     <ui-view class="span_20" bindtap="actives(3)">
-      <ui-view class="icon ctc"></ui-view>
+      <ui-view class="{{['icon','ctc',{active:active == 3}]}}"></ui-view>
     </ui-view>
     <ui-view class="span_20" bindtap="actives(4)">
-      <ui-view class="icon wallet"></ui-view>
+      <ui-view class="{{['icon','wallet',{active:active == 4}]}}"></ui-view>
     </ui-view>
   </ui-view>
   </ui-view>

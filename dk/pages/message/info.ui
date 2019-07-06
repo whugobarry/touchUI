@@ -1,0 +1,84 @@
+<template>
+    <ui-view class="info">
+       <div class="main">
+            <p class="content">{{content}}</p>
+            <p class="time">{{time}}</p>
+       </div>
+    </ui-view>
+</template>
+
+<script>
+import {wx} from 'static/utils/util.js'
+export default {
+    config:{
+        "navigationStyle":'custom'
+    },
+    data(){
+        return {
+            content:'',
+            time:''
+        }
+    },
+    created(){
+        console.log()
+        wx('/user/notice-detail?auth_key='+ui.getQuery().key,{
+            id:ui.getQuery().id,
+            mobile:ui.getQuery().phone
+        }).then((data)=>{
+            console.log(data);
+            if(data.code==200){
+                this.content = data.res.content
+                this.time = data.res.time;
+            }else if(data.code == 403){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:data.msg
+                })
+            }else if(data.code == 402){
+                ui.showAlert({
+                    content:data.msg,
+                    success(){
+                        localStorage.clear();
+                        ui.redirectTo({
+                            url:'/pages/login_register/login'
+                        })
+                    }
+                })
+            }
+        })
+    }
+}
+</script>
+
+<style lang="less">
+    .content{
+        padding-top: 20rpx;
+        text-indent: 2em;
+        width: 690rpx;
+        font-size: 28rpx;
+        font-family: "PingFang";
+        color: rgb(102, 102, 102);
+    }
+    .time{
+        font-size: 26rpx;
+        font-family: "PingFang";
+        color: rgb(173, 175, 188);
+        width: 690rpx;
+        margin: 50rpx auto 0;
+        text-align: right;
+    }
+</style>
+
+
+._2019_06_28___21:33 {
+  font-size: 26px;
+  font-family: "PingFang";
+  color: rgb(173, 175, 188);
+  line-height: 1.2;
+  text-align: left;
+  position: absolute;
+  left: 461.414px;
+  top: 276.458px;
+  z-index: 12;
+}
+

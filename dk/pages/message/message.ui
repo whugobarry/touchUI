@@ -1,47 +1,37 @@
 <template>
-    <ui-scroll-view class="message">
-        <ui-view class="list">
+    <ui-view class="message" id="msg">
+        <ui-view class="list" ui:for="{{message}}">
             <ui-view class="top">
+                <ui-view class="redcircle" ui:if="{{item.status == 0 ? true : false}}"></ui-view>
                 <ui-view class="icon_message"></ui-view>
                 <ui-text class="title">系统消息</ui-text>
             </ui-view>
             <ui-view class="center">
-                <ui-text class="info">KYC认证结果：恭喜您完成KYC认证通过。</ui-text>
+                <ui-text class="info">{{item.content}}</ui-text>
             </ui-view>
             <ui-view class="bottom">
-                <ui-text class="time">2019-06-28 21:33</ui-text>
-                <!-- <ui-text class="link">查看详情</ui-text> -->
+                <ui-text class="time">{{item.time}}</ui-text>
+                <ui-text class="link" bindtap="look(item.id)">查看详情</ui-text>
             </ui-view>
         </ui-view>
-        <ui-view class="list">
-            <ui-view class="top">
-                <ui-view class="redcircle"></ui-view>
-                <ui-view class="icon_message"></ui-view>
-                <ui-text class="title">系统消息</ui-text>
-            </ui-view>
-            <ui-view class="center">
-                <ui-text class="info">确认收款提醒：订单1822227已付款，请...</ui-text>
-            </ui-view>
-            <ui-view class="bottom">
-                <ui-text class="time">2019-06-28 21:33</ui-text>
-                <ui-text class="link">查看详情</ui-text>
-            </ui-view>
-        </ui-view>
-    </ui-scroll-view>
+    </ui-view>
 </template>
 
 <script>
 import {wx} from 'static/utils/util.js'
 export default {
     config:{
-        "navigationStyle":'custom'
+        "navigationStyle":'custom',
     },
     data(){
         return {
-            page:1,//分页
+            page:1,//分页,
+            message:[],
         }
     },
     created(){
+        // 判断是否存在 key
+        window.addEventListener('scroll',this.scroll);
         var key = localStorage.getItem('auth_key');
         var info = localStorage.getItem('info')
         if(key != null && info != null){
@@ -50,14 +40,69 @@ export default {
                 mobile:JSON.parse(info).phone,
                 page:this.page
             }).then((data)=>{
-                console.log(data)
+                if(data.code == 200){
+                    console.log(data)
+                    for (let i = 0;i < data.res.length; i++){
+                        this.message.push(data.res[i]);
+                    }
+                    console.log(this.message);
+                }else if(data.code == 403){
+                    ui.showAlert({
+                        title:'温馨提示',
+                        message:data.msg
+                    })
+                }else if(data.code == 402){
+                    ui.showAlert({
+                        content:data.msg,
+                        success(){
+                            localStorage.clear();
+                            ui.redirectTo({
+                                url:'/pages/login_register/login'
+                            })
+                        }
+                    })
+                }
             })
         }else{
             ui.redirectTo({
                 url:'/pages/login_register/login'
             })
         }
-        
+    },
+    methods:{
+        scroll(){
+            console.log('scroll')
+            var clientHeight = document.getElementById('msg').clientHeight;
+            var outHieght = document.documentElement.clientHeight;
+            var scrollTop = document.documentElement.scrollTop;
+            if(clientHeight < (outHieght+scrollTop)){
+                this.loading()
+            }
+        },
+        // 加载
+        loading(){
+            var key = localStorage.getItem('auth_key')
+            var info = localStorage.getItem('info');
+            console.log(status)
+            this.page++;
+            wx('/user/notice-list?auth_key='+key,{
+                uid:JSON.parse(info).uid,
+                mobile:JSON.parse(info).phone,
+                page:this.page
+            }).then((data)=>{
+                console.log(data)
+                for (let i = 0;i < data.res.length; i++){
+                    this.message.push(data.res[i]);
+                }
+                console.log(this.message);
+            })
+        },
+        // 查看消息详情
+        look(id){
+            ui.navigateTo({
+                url:'/pages/message/info?id='+id+'&key='+localStorage.getItem('auth_key')+'&phone='+JSON.parse(localStorage.getItem('info')).phone
+            })
+        }
     }
 }
 </script>

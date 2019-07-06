@@ -1,0 +1,281 @@
+<template>
+    <ui-view class="kyc">
+        <form action="{{url}}">
+            <div class="warp">
+                <div class="main">
+                    <div class="top">
+                        <p class="tip">拍摄并上传您的身份证照片</p>
+                        <div class="preview card">
+                            <img src="{{card}}" alt="">
+                            <input type="file" class="file" bindchange="change" disabled="{{status_txt == '' ? false : true}}">
+                        </div>
+                        <p class="tips">请您上传有效证件正面照，请确保内容清晰可见</p>
+                    </div>
+                    <div class="top">
+                        <p class="tip">本人有效证件正面照片和个人签字</p>
+                        <div class="preview hand">
+                            <img src="{{hand}}" alt="">
+                            <input type="file" class="file" bindchange="onchange" disabled="{{status_txt == '' ? false : true}}">
+                        </div>
+                        <p class="tips">请您上传手持有效证件正面照和个人签字照片，<br>个人签字的内容包含当前日期，请确保内容清晰可见。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="btn">
+                <ui-button type="primary" class="submit" bindtap="submit" disabled="{{status_txt == '' ? false : true}}">{{status_txt == '' ? '提 交' : status_txt}}</ui-button>
+            </div>
+            <p class="req">照片要求<br>1.照片清晰<br>2.大小：小于10M<br>3.格式：jpg、png、jpeg </p>
+        </form>
+    </ui-view>
+</template>
+
+<script>
+import {wx} from 'static/utils/util.js'
+import $ from 'jquery'
+export default {
+    config:{
+        "navigationStyle":'custom'
+    },
+    data(){
+        return{
+            url:'',//请求 url
+            card:'',
+            hand:'',
+            cardObj:'',
+            handObj:'',
+            status:'',//审核状态
+            status_txt:'',
+        }
+    },
+    created(){
+        console.log($)
+        var key = localStorage.getItem('auth_key');
+        if(key != null){
+            this.url = '/user/kyc-page?auth_key='+key
+            wx(this.url,{mobile:JSON.parse(localStorage.getItem('info')).phone}).then((data)=>{
+                console.log(data);
+                if(data.code == 200){
+                    if(data.res.length != 0){
+                        this.card = data.res.pic_z;
+                        this.hand = data.res.pic_s;
+                    }
+                    if(data.res.status == 0){
+                        this.status_txt = '审核中'
+                    }else if(data.res.status == 1){
+                        this.status_txt = '已审核'
+                    }else if(data.res.status == 2){
+                        this.status_txt = ''
+                    }
+                }else if(data.code == 403){
+                    ui.showAlert({
+                        title:'温馨提示',
+                        content:data.msg,
+                    })
+                }else if(data.code == 402){
+                    ui.showAlert({
+                        content:data.msg,
+                        success(){
+                            ui.redirectTo({
+                                url:'/pages/login_register/login'
+                            })
+                        }
+                    })
+                }
+            })
+        }else{
+            ui.redirectTo({
+                url:'/pages/login_register/login'
+            })
+        }
+    },
+    methods:{
+        // 身份证正面
+        change(e){
+            console.log(e)
+            var app = this;
+            var read = new FileReader();
+            var file = e.target.files[0];
+            read.readAsDataURL(file);
+            read.onloadend = function(read){
+                app.card = read.target.result;
+                console.log(read)
+            }
+            this.cardObj = file;
+            
+        },
+        onchange(e){
+            var app = this;
+            var read = new FileReader();
+            var file = e.target.files[0];
+            read.readAsDataURL(file);
+            read.onloadend = function(read){
+                app.hand = read.target.result;
+            }
+            console.log(e)
+            this.handObj = file;
+        },
+        submit(){
+            console.log(this.cardObj,this.handObj)
+            if(this.cardObj == ''){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:'请上传身份证照片'
+                })
+            }else if(this.handObj == ''){
+                ui.showAlert({
+                    title:'温馨提示',
+                    content:'请上传手持身份证+签名图片'
+                })
+            }else{
+                var fromData = new FormData();
+                fromData.append('mobile',JSON.parse(localStorage.getItem('info')).phone);
+                fromData.append('pic_z',this.cardObj);
+                fromData.append('pic_s',this.handObj);
+                $.ajax({
+                    url:'https://server.agamchain.com//api/user/kyc?auth_key='+localStorage.getItem('auth_key'),
+                    method:'post',
+                    data:fromData,
+                    dataType:'json',
+                    contentType:false,
+                    processData:false,
+                    success(data){
+                        console.log(data);
+                        if(data.code == 200){
+                            ui.showToast({
+                                title:data.msg,
+                                icon:'success'
+                            })
+                        }else if(data.code == 403){
+                            ui.showAlert({
+                                title:'温馨提示',
+                                content:data.msg,
+                            })
+                        }else if(data.code == 402){
+                            ui.showAlert({
+                                content:data.msg,
+                                success(){
+                                    ui.redirectTo({
+                                        url:'/pages/login_register/login'
+                                    })
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+        }
+    },
+    watch:{
+        card(data){
+            if(data != ''){
+                document.querySelector('.card').style.background = 'url("")';
+            }else{
+                document.querySelector('.card').style.background = "url('https://www.agamchain.com/static/b9977b472e6dde65b36dbe55949a7326') no-repeat center center / 500rpx 362rpx";
+            }
+        },
+        hand(data){
+            if(data != ''){
+                document.querySelector('.hand').style.background = 'url("")';
+            }else{
+                document.querySelector('.hand').style.background = "url('https://www.agamchain.com/static/25a0ccb16662bf16beb562ee7433dbe3') no-repeat center center / 500rpx 362rpx";
+            }
+        }
+    }
+}
+</script>
+
+<style lang="less">
+    .kyc{
+        width: 100%;
+        height: 100%;
+        padding-bottom: 30rpx;
+        .warp{
+            background: #fff;
+        }
+        .main{
+            width: 690rpx;
+            margin: 0 auto;
+            background: #fff;
+            padding-bottom: 20rpx;
+            .top{
+                padding-top: 20rpx;
+                .tip{
+                    font-size: 30rpx;
+                    font-family: "PingFang";
+                    color: rgb(27, 27, 32);
+                }
+                .preview{
+                    width: 500rpx;
+                    height: 362rpx;
+                    margin: 30rpx auto 0;
+                    position: relative;
+                    // background: url('https://www.agamchain.com/static/b9977b472e6dde65b36dbe55949a7326') no-repeat center center / 500rpx 362rpx;
+                    .file{
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0,0,0,0);
+                        opacity: 0;
+                    }
+                }
+                .card{
+                    background: url('https://www.agamchain.com/static/b9977b472e6dde65b36dbe55949a7326') no-repeat center center / 500rpx 362rpx;
+                }
+                .hand{
+                    background: url('https://www.agamchain.com/static/25a0ccb16662bf16beb562ee7433dbe3') no-repeat center center / 500rpx 362rpx;
+                }
+                .card img{
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+                .hand img{
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+                .tips{
+                    margin-top: 20rpx;
+                    text-align: center;
+                    font-size: 24rpx;
+                    color: rgb(176, 176, 193);
+                }
+            }
+        }
+        .btn{
+            margin-top: 50rpx;
+            text-align: center;
+            .submit{
+                height: 88rpx;
+                line-height: 88rpx;
+                color: #fff;
+                width: 630rpx;
+                border-radius: 44rpx;
+                background: #4974fd;
+                border: 1px solid #4974fd;
+            }
+        }
+        .req{
+            width: 630rpx;
+            margin: 20rpx auto 0;
+            font-size: 24rpx;
+            font-family: "PingFang";
+            color: rgb(176, 176, 193);
+        }
+    }
+</style>
+
+
+{
+  font-size: 24px;
+  font-family: "PingFang";
+  color: rgb(176, 176, 193);
+  line-height: 1.5;
+  position: absolute;
+  left: 59.849px;
+  top: 1409.96px;
+  z-index: 12;
+}
