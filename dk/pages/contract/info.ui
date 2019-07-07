@@ -1,0 +1,77 @@
+<template>
+    <div class="info">
+        <button bindtap="buy(1,17600740311,'睡觉')">购买</button>
+    </div>
+</template>
+
+<script>
+import {wx} from 'static/utils/util.js'
+export default {
+    config:{
+        "navigationStyle":"custom"
+    },
+    data(){
+        return {
+            key:'',
+        }
+    },
+    created(){
+        var key = localStorage.getItem('auth_key');
+        var info = localStorage.getItem('info');
+        if(key != null && info != null){
+            this.key = key;
+            wx('/contract/one?auth_key='+key,{
+                cid:ui.getQuery().cid,
+                mobile:JSON.parse(info).phone
+            }).then((data) => {
+                console.log(data);
+            })
+        }
+    },
+    methods:{
+        buy(cid,phone,theme){
+            console.log(cid,phone,theme)
+            wx('/contract/buy?auth_key='+this.key,{
+                cid:cid,
+                mobile:phone,
+                theme:theme
+            }).then((data) => {
+                // console.log(data)
+                if(data.code == 200){
+                    ui.showToast({
+                        title:data.msg,
+                        icon:'success'
+                    })
+                    ui.redirectTo({
+                        url:'/pages/layout/home'
+                    })
+                }else if(data.code == 403){
+                    console.log(data.msg)
+                    ui.showAlert({
+                        content:data.msg,
+                        success(){
+                            ui.redirectTo({
+                                url:'/pages/layout/home'
+                            })
+                        }
+                    })
+                }else if(data.code == 405){
+                    console.log(data.msg)
+                    ui.showAlert({
+                        content:data.msg,
+                        success(){
+                            ui.redirectTo({
+                                url:'/pages/login_register/login'
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    }
+}
+</script>
+
+<style>
+
+</style>

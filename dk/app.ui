@@ -7,9 +7,11 @@ export default {
       "pages/login_register/forget",
       "pages/layout/home",
       "pages/layout/shop",
+      "pages/layout/address",
       "pages/message/message",
       "pages/message/info",
-      "pages/auth/kyc"
+      "pages/auth/kyc",
+      "pages/contract/info"
     ],
     "theme": {
       "theme-color": "#0e29fb"
@@ -116,14 +118,18 @@ export default {
       this.handleIosGesture()
       this.initTab()
       this.initBodyStyle()
-      if(path != '/pages/layout/shop' && path != '/pages/layout/home' && path != '/pages/layout/c2c'){
+      if(path != '/pages/layout/address' && path != '/pages/layout/shop' && path != '/pages/layout/home' && path != '/pages/layout/c2c'){
         this.footer = false;
+      }else{
+        this.footer = true;
       }
     },
     active(data){
       console.log(data)
       if(data == 0){
-
+        ui.redirectTo({
+          url:'/pages/layout/address'
+        })
       }else if(data == 1){
         ui.redirectTo({
           url:'/pages/layout/shop?id='+data
@@ -225,9 +231,6 @@ export default {
     }
 
   },
-  mounted () {
-
-  }
 }
 </script>
 

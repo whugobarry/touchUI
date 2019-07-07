@@ -155,6 +155,15 @@ export default {
                     var ctx = document.getElementById('canvas').getContext('2d');
                     console.log(ctx)
                     draw(ctx,this.progress,window.devicePixelRatio)
+                }else if(data.code == 400){
+                    ui.showAlert({
+                        content:data.msg,
+                        success(){
+                            ui.redirectTo({
+                                url:'/pages/login_register/login'
+                            })
+                        }
+                    })
                 }
             })
         }else{

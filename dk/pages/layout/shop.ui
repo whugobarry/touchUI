@@ -7,8 +7,8 @@
                     <ui-view class="{{['right',{active: active == 1}]}}" bindtap="activ(1)">我的合约</ui-view>
                 </ui-view>
             </ui-view>
-            <ui-view class="list" ui:for="{{contract}}">
-                <ui-view class="heyue" style="{{{background:'url('+item.pic+') no-repeat'}}}">
+            <ui-view class="list" ui:for="{{contract}}" bindtap="conInfo(active,item.id)">
+                <ui-view class="{{['heyue',{end:item.status == 0},{doing:item.status == 1}]}}" style="{{{background:'url('+item.pic+') no-repeat'}}}">
                     <ui-view class="left">
                         <ui-view class="title">{{item.name}}</ui-view>
                         <ui-view class="tip">
@@ -16,54 +16,6 @@
                         </ui-view>
                     </ui-view>
                 </ui-view>
-                <!-- <ui-view class="heyue chuji">
-                    <ui-view class="left">
-                        <ui-view class="title">初级合约(20%收益)</ui-view>
-                        <ui-view class="tip">
-                            支付合约金1450AGC，每天打卡奖励AGC，总奖励数量为1740个AGC
-                        </ui-view>
-                    </ui-view>
-                </ui-view>
-                <ui-view class="heyue zhongji">
-                    <ui-view class="left">
-                        <ui-view class="title">中级合约(20%收益)</ui-view>
-                        <ui-view class="tip">
-                            支付合约金7250AGC，每天打卡奖励AGC，总奖励数量为8700个AGC
-                        </ui-view>
-                    </ui-view>
-                </ui-view>
-                <ui-view class="heyue gaoji">
-                    <ui-view class="left">
-                        <ui-view class="title">高级合约(30%收益)</ui-view>
-                        <ui-view class="tip">
-                            支付合约金1450AGC，每天打卡奖励AGC，总奖励数量为1740个AGC
-                        </ui-view>
-                    </ui-view>
-                </ui-view>
-                <ui-view class="heyue jinjie">
-                    <ui-view class="left">
-                        <ui-view class="title">进阶合约(20%收益)</ui-view>
-                        <ui-view class="tip">
-                            支付合约金14500AGC，每天打卡奖励AGC，总奖励数量为8700个AGC
-                        </ui-view>
-                    </ui-view>
-                </ui-view>
-                <ui-view class="heyue jingying">
-                    <ui-view class="left">
-                        <ui-view class="title">精英合约(20%收益)</ui-view>
-                        <ui-view class="tip">
-                            支付合约金1450AGC，每天打卡奖励AGC，总奖励数量为1740个AGC
-                        </ui-view>
-                    </ui-view>
-                </ui-view>
-                <ui-view class="heyue zhuanjia">
-                    <ui-view class="left">
-                        <ui-view class="title">专家合约(36%收益)</ui-view>
-                        <ui-view class="tip">
-                            支付合约金1450AGC，每天打卡奖励AGC，总奖励数量为1740个AGC
-                        </ui-view>
-                    </ui-view>
-                </ui-view> -->
             </ui-view>
             <ui-view class="msg">AGC可以提现(USDT),1AGC=0.02USDT</ui-view>
         </ui-view>
@@ -116,6 +68,72 @@ export default {
     methods:{
         activ(id){
             this.active = id;
+            if(id == 0){
+                wx('/contract/all?auth_key='+localStorage.getItem('auth_key'),{
+                    mobile:JSON.parse(localStorage.getItem('info')).phone
+                }).then((data)=>{
+                    console.log(data)
+                    if(data.code == 200){
+                        this.contract = data.res;
+                    }else if(data.code == 403){
+                        ui.showAlert({
+                            title:'温馨提示',
+                            content:data.msg
+                        })
+                    }else if(data.code == 402){
+                        ui.showAlert({
+                            content:data.msg,
+                            success(){
+                                ui.redirectTo({
+                                    url:'/pages/login_register/login'
+                                })
+                            }
+                        })
+                    }
+                })
+            }else if(id == 1){
+                wx('/contract/my?auth_key='+localStorage.getItem('auth_key'),{
+                    mobile:JSON.parse(localStorage.getItem('info')).phone
+                }).then((data)=>{
+                    console.log(data);
+                    if(data.code == 200){
+                        this.contract = data.res;
+                    }else if(data.code == 403){
+                        ui.showAlert({
+                            title:'温馨提示',
+                            content:data.msg
+                        })
+                    }else if(data.code == 402){
+                        ui.showAlert({
+                            content:data.msg,
+                            success(){
+                                ui.redirectTo({
+                                    url:'/pages/login_register/login'
+                                })
+                            }
+                        })
+                    }else if(data.code == 400){
+                        ui.showAlert({
+                            content:data.msg,
+                            success(){
+                                ui.redirectTo({
+                                    url:'/pages/login_register/login'
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        },
+        conInfo(id,cid){
+            console.log(id,cid)
+            if(id == 0){
+                ui.navigateTo({
+                    url:'/pages/contract/info?cid='+cid
+                })
+            }else if(id == 1){
+                
+            }
         }
     }
 }
@@ -209,48 +227,54 @@ export default {
                         line-height: 58rpx;
                     }
                 }
-                .tiyan{
-                    background: url('https://www.agamchain.com/static/9075e40adf0f5fe9cfa9f9b5e476aad9') no-repeat center center / 690rpx 220rpx;
-                    .right{
-                        box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(1, 19, 199, 0.32);
-                        color: rgb(14, 41, 251);
-                    }
+                .end{
+                    background: url('https://www.agamchain.com/static/8ffdd9ed0a91c705e6818e5ba78d61db') no-repeat !important;
                 }
-                .chuji{
-                    background: url('https://www.agamchain.com/static/fa57ddad874a52f601e51fa3eeee00e3') no-repeat center center / 690rpx 220rpx;
-                    .right{
-                        color: rgb(14, 41, 251);
-                        box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(84, 63, 237, 0.3);
-                    }
+                .doing{
+                    background: url('https://www.agamchain.com/static/5e409879213653448590e477aac033af') no-repeat !important;
                 }
-                .zhongji{
-                    background: url('https://www.agamchain.com/static/fa57ddad874a52f601e51fa3eeee00e3') no-repeat center center / 690rpx 220rpx;
-                    .right{
-                        color: rgb(14, 41, 251);
-                        box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(84, 63, 237, 0.3);
-                    }
-                }
-                .gaoji{
-                    background: url('https://www.agamchain.com/static/5e409879213653448590e477aac033af') no-repeat center center / 690rpx 220rpx;
+                // .tiyan{
+                //     background: url('https://www.agamchain.com/static/9075e40adf0f5fe9cfa9f9b5e476aad9') no-repeat center center / 690rpx 220rpx;
+                //     .right{
+                //         box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(1, 19, 199, 0.32);
+                //         color: rgb(14, 41, 251);
+                //     }
+                // }
+                // .chuji{
+                //     background: url('https://www.agamchain.com/static/fa57ddad874a52f601e51fa3eeee00e3') no-repeat center center / 690rpx 220rpx;
+                //     .right{
+                //         color: rgb(14, 41, 251);
+                //         box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(84, 63, 237, 0.3);
+                //     }
+                // }
+                // .zhongji{
+                //     background: url('https://www.agamchain.com/static/fa57ddad874a52f601e51fa3eeee00e3') no-repeat center center / 690rpx 220rpx;
+                //     .right{
+                //         color: rgb(14, 41, 251);
+                //         box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(84, 63, 237, 0.3);
+                //     }
+                // }
+                // .gaoji{
+                //     background: url('https://www.agamchain.com/static/5e409879213653448590e477aac033af') no-repeat center center / 690rpx 220rpx;
 
-                }
-                .jinjie{
-                    background: url('https://www.agamchain.com/static/fa57ddad874a52f601e51fa3eeee00e3') no-repeat center center / 690rpx 220rpx;
-                    .right{
-                        color: rgb(14, 41, 251);
-                        box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(84, 63, 237, 0.3);
-                    }
-                }
-                .jingying{
-                    background: url('https://www.agamchain.com/static/fa57ddad874a52f601e51fa3eeee00e3') no-repeat center center / 690rpx 220rpx;
-                    .right{
-                        color: rgb(14, 41, 251);
-                        box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(84, 63, 237, 0.3);
-                    }
-                }
-                .zhuanjia{
-                    background: url('https://www.agamchain.com/static/5e409879213653448590e477aac033af') no-repeat center center / 690rpx 220rpx;
-                }
+                // }
+                // .jinjie{
+                //     background: url('https://www.agamchain.com/static/fa57ddad874a52f601e51fa3eeee00e3') no-repeat center center / 690rpx 220rpx;
+                //     .right{
+                //         color: rgb(14, 41, 251);
+                //         box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(84, 63, 237, 0.3);
+                //     }
+                // }
+                // .jingying{
+                //     background: url('https://www.agamchain.com/static/fa57ddad874a52f601e51fa3eeee00e3') no-repeat center center / 690rpx 220rpx;
+                //     .right{
+                //         color: rgb(14, 41, 251);
+                //         box-shadow: 2.5rpx 4.33rpx 13rpx 0px rgba(84, 63, 237, 0.3);
+                //     }
+                // }
+                // .zhuanjia{
+                //     background: url('https://www.agamchain.com/static/5e409879213653448590e477aac033af') no-repeat center center / 690rpx 220rpx;
+                // }
 
             }
             .msg{
